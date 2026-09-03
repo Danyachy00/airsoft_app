@@ -5,10 +5,14 @@ import Preload from "./components/Preload.jsx"
 import GameDetails from "./components/GameDetails.jsx"
 import Register from "./components/Register.jsx"
 import Profile from "./components/Profile.jsx"
+import {loginTelegram} from "./helpers/auth.js";
 
-export default function App() {
+export default async function App() {
     const rawData = window?.Telegram?.WebApp?.initData;
     console.log(rawData);
+    if (rawData) {
+     const user = await    loginTelegram (rawData)
+    }
     return (
         <BrowserRouter>
             <Routes>

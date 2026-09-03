@@ -15,3 +15,11 @@ export function logout() {
 export function isAuthenticated() {
     return !!localStorage.getItem('token')
 }
+
+export async function loginTelegram(initData) {
+    const response = await axios.post('/auth/telegram', {initData})
+    const { token, user } = response.data.data
+
+    localStorage.setItem('token', token)
+    return user
+}
