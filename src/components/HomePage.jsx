@@ -1,9 +1,30 @@
 import '/src/App.css'
-import {currentUser} from "../data/data.js";
-import GameCard from "./GameCard.jsx";
-import BottomNav from "./BottomNav.jsx";
+import { useState, useEffect } from 'react'
+import { currentUser } from "../data/data.js"
+import GameCard from './GameCard.jsx'
+import BottomNav from './BottomNav.jsx'
+import { getGames } from '../helpers/games.js'
 
-const HomePage = ({games}) => {
+const HomePage = () => {
+    const [games, setGames] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState('')
+
+    useEffect(() => {
+        async function fetchGames() {
+            try {
+                const data = await getGames()
+                setGames(data)
+            } catch (err) {
+                setError('Не вдалось завантажити ігри')
+                console.error(err)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchGames()
+    }, [])
+
     return (
         <div className="home-page app-page min-h-screen">
             <div className='home-header app-container'>
@@ -12,6 +33,9 @@ const HomePage = ({games}) => {
             </div>
 
             <div className="game-list app-container">
+                {loading && <p>Завантаження...</p>}
+                {error && <p>{error}</p>}
+                {!loading && !error && games.length === 0 && <p>Ігор поки немає</p>}
                 {games.map(game => (
                     <GameCard key={game.id} game={game} />
                 ))}

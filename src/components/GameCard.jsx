@@ -1,8 +1,9 @@
-import {Calendar, DollarSign, MapPin, Users} from 'lucide-react'
+import {Calendar, MapPin, Users} from 'lucide-react'
 import {useNavigate} from 'react-router-dom'
 
 const GameCard = ({game}) => {
     const navigate = useNavigate()
+    const freeSpots = game.total_to_rent - game.total_players
 
     return (
         <button
@@ -22,15 +23,10 @@ const GameCard = ({game}) => {
                 <p>{game.location}</p>
             </div>
 
-            <div className='flex gap-2'>
-                <DollarSign size={26} strokeWidth={1}/>
-                <p>{game.price}</p>
-            </div>
-
             <div className='game-card__footer'>
                 <div className='flex gap-2'>
                     <Users size={26} strokeWidth={1}/>
-                    <p>{game.freeSpots} з {game.totalSpots}</p>
+                    <p>{freeSpots} з {game.total_to_rent}</p>
                 </div>
 
                 <span className='underline underline-offset-6'>Детальніше</span>
