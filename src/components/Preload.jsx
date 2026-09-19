@@ -1,14 +1,38 @@
 import scope from '../assets/scope.png'
 import logo from '../assets/logo.png'
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import '/src/App.css'
 import {useNavigate} from 'react-router-dom'
+import {loginTelegram} from "../helpers/auth.js";
+import {useUser} from "../context/UserContext.jsx";
 
 const Preload = () => {
     const navigate = useNavigate();
     const [dots, setDots] = useState('')
+    const { setUser } = useUser()
 
     const [preload, setPreload] = useState(0);
+    const [authChecked, setAuthChecked] = useState(false)
+
+    useEffect(() => {
+        async function loginTg() {
+            try {
+                const rawData = window?.Telegram?.WebApp?.initData;
+                if (rawData) {
+                    const user = await loginTelegram(rawData)
+                    console.log('Успішно залогінились:', user)
+                    setUser(user)
+                }
+            } catch (err) {
+                console.error('Помилка логіну:', err)
+                alert('Помилка логіну, дивись консоль (F12)')
+            } finally {
+                setAuthChecked(true)
+            }
+        }
+
+        loginTg()
+    }, [])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -25,7 +49,7 @@ const Preload = () => {
 
 
     useEffect(() => {
-        if (preload >= 100) {
+        if (preload >= 100 && authChecked) {
             navigate('/games')
         }
     }, [navigate, preload])
