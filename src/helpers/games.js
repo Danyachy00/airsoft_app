@@ -15,12 +15,18 @@ export async function createGame(payload) {
     return data.data
 }
 
+export async function updateGame(id, payload) {
+    const { data } = await axios.put(`/game/${id}`, payload)
+    return data.data
+}
+
 export async function deleteGame(id) {
     await axios.delete(`/game/${id}`)
 }
 
-export async function signUpForGame(id) {
-    const { data } = await axios.post(`/game/${id}/sign-up`)
+// Ендпоінт приймає тільки { rent, note }
+export async function signUpForGame(id, { rent = false, note = '' } = {}) {
+    const { data } = await axios.post(`/game/${id}/sign-up`, { rent, note })
     return data.data
 }
 

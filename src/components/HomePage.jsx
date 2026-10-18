@@ -1,6 +1,6 @@
 import '/src/App.css'
 import { useState, useEffect } from 'react'
-import { useUser } from "../context/UserContext.jsx"
+import { useUser } from "../context/useUser.js"
 import GameCard from './GameCard.jsx'
 import BottomNav from './BottomNav.jsx'
 import { getGames } from '../helpers/games.js'

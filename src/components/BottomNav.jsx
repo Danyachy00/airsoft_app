@@ -1,7 +1,11 @@
-import {Flag, User} from 'lucide-react'
+import {Flag, ShieldCheck, User} from 'lucide-react'
 import {NavLink} from 'react-router-dom'
+import {useUser} from '../context/useUser.js'
+import {isAdmin} from '../helpers/auth.js'
 
 const BottomNav = () => {
+    const {user} = useUser()
+
     return (
         <nav className='bottom-nav'>
             <NavLink
@@ -23,6 +27,18 @@ const BottomNav = () => {
                 <User size={26} strokeWidth={1.5}/>
                 <p>Особистий профіль</p>
             </NavLink>
+
+            {isAdmin(user) && (
+                <NavLink
+                    to="/admin"
+                    className={({isActive}) =>
+                        `bottom-nav__button ${isActive ? 'bottom-nav__button--active' : ''}`
+                    }
+                >
+                    <ShieldCheck size={26} strokeWidth={1.5}/>
+                    <p>Адмінка</p>
+                </NavLink>
+            )}
         </nav>
     )
 }

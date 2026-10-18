@@ -1,10 +1,12 @@
 import {useEffect, useState} from 'react'
 import {Calendar, ShieldCheck, User} from 'lucide-react'
-import {currentUser} from '../data/data.js'
 import BottomNav from './BottomNav.jsx'
+import {useUser} from '../context/useUser.js'
+import {isAdmin} from '../helpers/auth.js'
 import {getGames} from '../helpers/games.js'
 
 const Profile = () => {
+    const {user} = useUser()
     const [games, setGames] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
@@ -36,8 +38,8 @@ const Profile = () => {
                     </div>
 
                     <div>
-                        <p className="profile-label">Гравець</p>
-                        <h1 className="profile-title">{currentUser.username}</h1>
+                        <p className="profile-label">{isAdmin(user) ? 'Адміністратор' : 'Гравець'}</p>
+                        <h1 className="profile-title">{user?.name}</h1>
                     </div>
                 </section>
 

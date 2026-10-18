@@ -1,10 +1,10 @@
 import scope from '../assets/scope.png'
 import logo from '../assets/logo.png'
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useState} from 'react'
 import '/src/App.css'
 import {useNavigate} from 'react-router-dom'
 import {loginTelegram} from "../helpers/auth.js";
-import {useUser} from "../context/UserContext.jsx";
+import {useUser} from "../context/useUser.js";
 
 const Preload = () => {
     const navigate = useNavigate();
@@ -32,7 +32,7 @@ const Preload = () => {
         }
 
         loginTg()
-    }, [])
+    }, [setUser])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -52,7 +52,7 @@ const Preload = () => {
         if (preload >= 100 && authChecked) {
             navigate('/games')
         }
-    }, [navigate, preload])
+    }, [navigate, preload, authChecked])
 
 
 

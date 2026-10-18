@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Calendar, MapPin, Users, LucideClock, ChevronDown, ChevronLeft } from "lucide-react"
-import { getGame, signUpForGame, cancelSignUpForGame } from '../helpers/games'
+import { getGame, cancelSignUpForGame } from '../helpers/games'
 
 const GameDetails = () => {
     const navigate = useNavigate()
@@ -14,26 +14,32 @@ const GameDetails = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [actionLoading, setActionLoading] = useState(false)
 
-    async function loadGame() {
-        setLoading(true)
-        try {
-            const data = await getGame(gameId)
-            setGame(data)
-        } catch (err) {
-            setError('Не вдалось завантажити гру')
-            console.error(err)
-        } finally {
-            setLoading(false)
-        }
-    }
+    const [reloadKey, setReloadKey] = useState(0)
 
-    useEffect(() => { loadGame() }, [gameId])
+    useEffect(() => {
+        let cancelled = false
+
+        async function loadGame() {
+            try {
+                const data = await getGame(gameId)
+                if (!cancelled) setGame(data)
+            } catch (err) {
+                if (!cancelled) setError('Не вдалось завантажити гру')
+                console.error(err)
+            } finally {
+                if (!cancelled) setLoading(false)
+            }
+        }
+
+        loadGame()
+        return () => { cancelled = true }
+    }, [gameId, reloadKey])
 
     async function handleCancelRegistration() {
         setActionLoading(true)
         try {
             await cancelSignUpForGame(gameId)
-            await loadGame()
+            setReloadKey(k => k + 1)
         } catch (err) {
             console.error(err)
             alert('Не вдалось скасувати запис')

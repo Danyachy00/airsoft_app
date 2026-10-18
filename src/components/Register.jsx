@@ -1,8 +1,9 @@
 import {useNavigate, useParams} from 'react-router-dom';
 import {User, Phone, Square, SquareCheck,X, Info} from 'lucide-react';
 import {useEffect, useState} from "react";
+import {signUpForGame} from '../helpers/games.js'
 
-const Register = ({onConfirmRegistration}) => {
+const Register = () => {
     const navigate = useNavigate();
     const {id} = useParams()
     const gameId = Number(id)
@@ -10,19 +11,42 @@ const Register = ({onConfirmRegistration}) => {
     const [rules, setRules] = useState(false)
     const [personal, setPersonal] = useState(false)
     const [alert, setAlert] = useState(false)
+    const [note, setNote] = useState('')
+    const [submitting, setSubmitting] = useState(false)
+    const [error, setError] = useState('')
 
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [])
 
-    const confirmRegistration = () => {
-        if (!Number.isNaN(gameId)) {
-            onConfirmRegistration(gameId)
-            navigate(`/games/${gameId}`)
+    const openConfirm = () => {
+        if (!rules || !personal) {
+            setError('Потрібно погодитись з правилами гри та обробкою персональних даних')
             return
         }
 
-        navigate('/games')
+        setError('')
+        setAlert(true)
+    }
+
+    const confirmRegistration = async () => {
+        if (Number.isNaN(gameId)) {
+            navigate('/games')
+            return
+        }
+
+        setSubmitting(true)
+        try {
+            // Ендпоінт приймає тільки { rent, note }
+            await signUpForGame(gameId, {rent: false, note})
+            navigate(`/games/${gameId}`)
+        } catch (err) {
+            console.error(err)
+            setAlert(false)
+            setError('Не вдалось записатись на гру. Спробуйте ще раз')
+        } finally {
+            setSubmitting(false)
+        }
     }
 
 
@@ -84,7 +108,8 @@ const Register = ({onConfirmRegistration}) => {
                         <p className="text-[#596166] pb-1">НОТАТКА (НЕ ОБОВ'ЯЗКОВО)</p>
                         <textarea className="h-35 w-full rounded-[10px] border border-[#8C999E] bg-[#1F2426] py-3 px-4"
                                   placeholder={'Досвід гри'}
-                                  type={'text'}/>
+                                  value={note}
+                                  onChange={e => setNote(e.target.value)}/>
                     </div>
 
                     <div className='flex gap-2.5 mb-3'>
@@ -149,8 +174,9 @@ const Register = ({onConfirmRegistration}) => {
                                         </div>
 
                                         <button className="mt-2 h-12 w-full rounded-[10px] border border-white text-sm"
+                                                disabled={submitting}
                                                 onClick={confirmRegistration}>
-                                            ПІТВЕРДИТИ ЗАПИС
+                                            {submitting ? 'ЗАПИСУЄМО...' : 'ПІТВЕРДИТИ ЗАПИС'}
                                         </button>
 
                                     </div>
@@ -158,8 +184,10 @@ const Register = ({onConfirmRegistration}) => {
                             </div>
                         )}
 
+                        {error && <p className="text-[#ff6b6b] text-sm">{error}</p>}
+
                         <button className="mt-3 h-12 w-full rounded-[10px] border border-white text-sm"
-                                onClick={() => setAlert(true)}>
+                                onClick={openConfirm}>
                             Завершіть заповнення форми
                         </button>
                     </div>
