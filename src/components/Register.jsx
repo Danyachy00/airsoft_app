@@ -1,12 +1,14 @@
-import {useNavigate, useParams} from 'react-router-dom';
-import {User, Phone, Square, SquareCheck,X, Info} from 'lucide-react';
+import {Link, useNavigate, useParams} from 'react-router-dom';
+import {Square, SquareCheck, X, Info} from 'lucide-react';
 import {useEffect, useState} from "react";
 import {signUpForGame} from '../helpers/games.js'
+import {useUser} from '../context/useUser.js'
 
 const Register = () => {
     const navigate = useNavigate();
     const {id} = useParams()
     const gameId = Number(id)
+    const {user} = useUser()
 
     const [rules, setRules] = useState(false)
     const [personal, setPersonal] = useState(false)
@@ -69,42 +71,14 @@ const Register = () => {
             </div>
             <div className="register-form app-container">
                 <div className="register-form__inner">
-                    <div className="mb-6.5">
-                        <div className="flex gap-2.5 mb-3">
-                            <User size={24} strokeWidth={1.5} color="#596166"/>
-                            <p className=" text-[#596166]">Нікнейм</p>
+                    {!user?.name && (
+                        <div className="register-form__notice">
+                            <Info size={18} className="shrink-0"/>
+                            <p>Вкажіть нікнейм у <Link to="/profile/edit" className='text-[#33CC66]'>профілі</Link>, щоб організатори знали, хто записався</p>
                         </div>
-                        <div>
-                            <input className="h-10 w-full rounded-[10px] border border-[#8C999E] bg-[#1F2426] pl-3"
-                                   placeholder={'Ваш Нік'}
-                                   type={'text'}/>
-                        </div>
-                    </div>
-                    <div className="mb-5.5">
-                        <div className="flex gap-2.5 mb-3">
-                            <Phone size={24} strokeWidth={1.5} color="#596166"/>
-                            <p className=" text-[#596166]">Номер телефону</p>
-                        </div>
-                        <div>
-                            <input className="h-10 w-full rounded-[10px] border border-[#8C999E] bg-[#1F2426] pl-3"
-                                   placeholder={'+380 XX XXX XXXX'}
-                                   type={"tel"}/>
-                        </div>
-                    </div>
-                    <div className="register-form__grid">
-                        <div>
-                            <p className="text-[#596166] pb-1">ВІК</p>
-                            <input className="h-10 w-full rounded-[10px] border border-[#8C999E] bg-[#1F2426] pl-3"
-                                   placeholder={'Ваш вік'}/>
-                        </div>
-                        <div className="mb-5.5">
-                            <p className="text-[#596166] pb-1">Досвід гри</p>
-                            <input className="h-10 w-full rounded-[10px] border border-[#8C999E] bg-[#1F2426] pl-3"
-                                   placeholder={'Досвід гри'}/>
-                        </div>
-                    </div>
+                    )}
 
-                    <div className="mb-5.5">
+                    <div className="register-form__note mb-5.5">
                         <p className="text-[#596166] pb-1">НОТАТКА (НЕ ОБОВ'ЯЗКОВО)</p>
                         <textarea className="h-35 w-full rounded-[10px] border border-[#8C999E] bg-[#1F2426] py-3 px-4"
                                   placeholder={'Досвід гри'}
@@ -112,7 +86,7 @@ const Register = () => {
                                   onChange={e => setNote(e.target.value)}/>
                     </div>
 
-                    <div className='flex gap-2.5 mb-3'>
+                    <div className='register-form__check flex gap-2.5 mb-3'>
                         <button
                             onClick={() => setRules(!rules)}>
                             {rules ? (
@@ -125,7 +99,7 @@ const Register = () => {
                         <p className='text-[15px]'>Погоджуюсь з <a href={''} className='text-[#33CC66] text-[15px]'>правилами
                             гри </a></p>
                     </div>
-                    <div className='flex gap-2.5  mb-3'>
+                    <div className='register-form__check flex gap-2.5  mb-3'>
                         <button
                             onClick={() => setPersonal(!personal)}>
                             {personal ? (

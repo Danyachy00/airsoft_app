@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react'
-import {Calendar, ShieldCheck, User} from 'lucide-react'
+import {Link} from 'react-router-dom'
+import {Calendar, Pencil, ShieldCheck, User} from 'lucide-react'
 import BottomNav from './BottomNav.jsx'
 import {useUser} from '../context/useUser.js'
 import {isAdmin} from '../helpers/auth.js'
@@ -41,6 +42,26 @@ const Profile = () => {
                         <p className="profile-label">{isAdmin(user) ? 'Адміністратор' : 'Гравець'}</p>
                         <h1 className="profile-title">{user?.name}</h1>
                     </div>
+                </section>
+
+                <section className="profile-info">
+                    <div className="profile-info__row">
+                        <p className="profile-label">Телефон</p>
+                        <p>{user?.phone || '—'}</p>
+                    </div>
+                    <div className="profile-info__row">
+                        <p className="profile-label">Вік</p>
+                        <p>{user?.age ?? '—'}</p>
+                    </div>
+                    <div className="profile-info__row">
+                        <p className="profile-label">Досвід гри</p>
+                        <p>{user?.exp || '—'}</p>
+                    </div>
+
+                    <Link to="/profile/edit" className="profile-edit-button">
+                        <Pencil size={18} strokeWidth={1.5}/>
+                        Редагувати профіль
+                    </Link>
                 </section>
 
                 <section className="profile-stats">

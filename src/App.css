@@ -383,6 +383,35 @@
   line-height: 1.15;
 }
 
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid #ffffff;
+  border-radius: 20px;
+  background: #181a1b;
+}
+
+.profile-info__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  text-align: right;
+}
+
+.profile-edit-button {
+  display: flex;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
 .profile-stats {
   display: grid;
   grid-template-columns: 1fr;
@@ -524,6 +553,18 @@
   gap: 16px;
 }
 
+.register-form__notice {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+  padding: 10px;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  background: #212121;
+  color: #b3b3b3;
+  font-size: 14px;
+}
+
 .register-modal {
   width: calc(100% - 32px);
   max-width: 384px;
@@ -603,6 +644,12 @@
     text-transform: uppercase;
   }
 
+  .register-form__inner .register-form__notice p {
+    color: #b3b3b3;
+    font-size: 12px;
+    text-transform: none;
+  }
+
   .register-form__inner .flex svg {
     width: 22px;
     height: 22px;
@@ -646,25 +693,23 @@
     resize: none;
   }
 
-  .register-form__inner > div:nth-child(4) {
+  .register-form__inner > .register-form__note {
     margin-bottom: 18px;
   }
 
-  .register-form__inner > div:nth-child(4) > p {
+  .register-form__note > p {
     margin-bottom: 8px;
     font-size: 16px;
     line-height: 1;
   }
 
-  .register-form__inner > div:nth-child(5),
-  .register-form__inner > div:nth-child(6) {
+  .register-form__inner > .register-form__check {
     align-items: center;
     gap: 6px;
     margin-bottom: 16px;
   }
 
-  .register-form__inner > div:nth-child(5) button,
-  .register-form__inner > div:nth-child(6) button {
+  .register-form__inner .register-form__check button {
     display: flex;
     width: 16px;
     height: 16px;
@@ -674,17 +719,14 @@
     color: #33cc66;
   }
 
-  .register-form__inner > div:nth-child(5) button svg,
-  .register-form__inner > div:nth-child(6) button svg {
+  .register-form__inner .register-form__check button svg {
     width: 17px;
     height: 17px;
     stroke: #33cc66;
   }
 
-  .register-form__inner > div:nth-child(5) p,
-  .register-form__inner > div:nth-child(6) p,
-  .register-form__inner > div:nth-child(5) a,
-  .register-form__inner > div:nth-child(6) a {
+  .register-form__inner .register-form__check p,
+  .register-form__inner .register-form__check a {
     font-size: 10px;
     line-height: 1.4;
     text-transform: none;
